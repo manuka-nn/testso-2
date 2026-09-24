@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seamline — demo walkthrough</title>
+<link rel="icon" href="../assets/favicon.png">
+<style>
+  :root { --ink:#0a0a0a; --muted:#6b6b68; --line:#e6e6e3; --paper:#f4f4f2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--paper); }
+  header.top { background: var(--ink); color: #fff; padding: 48px 24px 40px; text-align: center; }
+  header.top img { width: min(320px, 70vw); }
+  header.top p { color: #bdbdb8; max-width: 640px; margin: 18px auto 0; }
+  .seam { height: 2px; margin: 26px auto 0; max-width: 320px; background-image: repeating-linear-gradient(90deg, #fff 0 8px, transparent 8px 14px); }
+  main { max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; }
+  nav.toc { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; margin-bottom: 36px; }
+  nav.toc ol { margin: 8px 0 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  nav.toc a { color: var(--ink); }
+  section.step { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 26px; margin-bottom: 26px; }
+  .step h2 { margin: 0 0 6px; font-size: 1.35rem; letter-spacing: -.02em; display: flex; align-items: center; gap: 12px; }
+  .n { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: #fff; font-size: .95rem; flex: none; }
+  .step p, .step li { color: #333; }
+  .shots { display: grid; gap: 16px; margin-top: 16px; grid-template-columns: 1fr; }
+  .shots.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; }
+  figure { margin: 0; }
+  figure img { width: 100%; border: 1px solid var(--line); border-radius: 12px; display: block; box-shadow: 0 10px 30px -18px rgba(0,0,0,.35); }
+  figure.phone img { max-width: 360px; margin: 0 auto; }
+  figcaption { font-size: .85rem; color: var(--muted); margin-top: 8px; text-align: center; }
+  .tip { background: var(--paper); border-left: 3px solid var(--ink); padding: 10px 14px; border-radius: 0 10px 10px 0; font-size: .93rem; margin-top: 14px; }
+  code { background: #eee; padding: 1px 6px; border-radius: 5px; font-size: .88em; }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } section.step { padding: 18px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="../assets/logo-white.png" alt="Seamline">
+  <div class="seam"></div>
+  <p>A complete order, start to finish, recorded on a brand-new Seamline system: set-up → product → stock → quote → customer approval → order → live tracking link → invoice → payment → profit.</p>
+</header>
+<main>
+<nav class="toc"><strong>Walkthrough</strong><ol>
+  <li><a href="#s1">First start</a></li><li><a href="#s2">Company details</a></li><li><a href="#s3">Products with colours &amp; sizes</a></li>
+  <li><a href="#s4">Opening stock (purchase order)</a></li><li><a href="#s5">Quote and PDF</a></li><li><a href="#s6">Customer approves from their phone</a></li>
+  <li><a href="#s7">Order, invoice PDF and live tracking link</a></li><li><a href="#s8">Updating the customer as you go</a></li><li><a href="#s9">Delivery, payment and profit</a></li>
+  <li><a href="#s10">Customer portal and quote request form</a></li><li><a href="#s11">On mobile</a></li><li><a href="#s12">Going live with Supabase</a></li>
+</ol></nav>
+
+<section class="step" id="s1"><h2><span class="n">1</span>First start</h2>
+<p>Open <code>index.html</code> with VS Code Live Server. The Seamline loader plays, then — because the system is empty — you create the workspace: company name, your name, email and password. You become the admin.</p>
+<div class="shots two"><figure><img src="img/01-loader.jpg" alt=""><figcaption>Loading screen</figcaption></figure><figure><img src="img/02-setup.jpg" alt=""><figcaption>Fresh system — create your workspace</figcaption></figure></div>
+<div class="shots"><figure><img src="img/03-dashboard-fresh.jpg" alt=""><figcaption>The empty dashboard shows a “Getting started” checklist</figcaption></figure></div>
+</section>
+
+<section class="step" id="s2"><h2><span class="n">2</span>Company details</h2>
+<p><strong>Settings → Company.</strong> Phone, email, WhatsApp, address and bank details. These appear on every quote and invoice PDF, on the tracking page and in the customer portal.</p>
+<div class="shots"><figure><img src="img/04-settings.jpg" alt=""></figure></div>
+</section>
+
+<section class="step" id="s3"><h2><span class="n">3</span>Products with colours &amp; sizes</h2>
+<p><strong>Products → Product library → New product.</strong> Type the colours and sizes; every combination becomes its own stock item with an automatic SKU (e.g. <code>SL-TSH-001-BLA-M</code>).</p>
+<div class="shots"><figure><img src="img/05-product-form.jpg" alt=""></figure></div>
+</section>
+
+<section class="step" id="s4"><h2><span class="n">4</span>Opening stock with a purchase order</h2>
+<p><strong>Purchasing → Purchase orders → New</strong>, place it, then <strong>Receive goods</strong>. Stock goes up per colour and size, and the unit cost is recorded so profit is accurate later.</p>
+<div class="shots two"><figure><img src="img/06-receive.jpg" alt=""><figcaption>Receiving the purchase order</figcaption></figure><figure><img src="img/07-product-stock.jpg" alt=""><figcaption>Stock per variant</figcaption></figure></div>
+</section>
+
+<section class="step" id="s5"><h2><span class="n">5</span>Quote and PDF</h2>
+<p>A website request arrives as a lead. From the lead, <strong>Create quote</strong>: ready-stock tees plus made-to-order embroidered polos, with internal costs (never shown to the customer). <strong>Send quote</strong> gives you a customer link and <strong>Download PDF</strong> gives you a branded quotation.</p>
+<div class="shots two"><figure><img src="img/08-quote-sent.jpg" alt=""><figcaption>Quote with customer link, WhatsApp and email buttons</figcaption></figure><figure><img src="img/quote-pdf-1.jpg" alt=""><figcaption>The downloaded quotation PDF</figcaption></figure></div>
+</section>
+
+<section class="step" id="s6"><h2><span class="n">6</span>Customer approves from their phone</h2>
+<p>The customer opens the link — no login. They can download the PDF and approve, decline or request changes. Seamline shows the quote as <em>Viewed</em> as soon as they open it and <em>Approved</em> the moment they approve.</p>
+<div class="shots two"><figure class="phone"><img src="img/09-customer-quote.jpg" alt=""><figcaption>Customer’s view</figcaption></figure><figure class="phone"><img src="img/10-approve-modal.jpg" alt=""><figcaption>Approving</figcaption></figure></div>
+<div class="shots"><figure><img src="img/11-quote-approved.jpg" alt=""><figcaption>Back in Seamline: approved, ready to convert</figcaption></figure></div>
+</section>
+
+<section class="step" id="s7"><h2><span class="n">7</span>Order, invoice PDF and live tracking link</h2>
+<p><strong>Convert to order → Confirm order.</strong> Ready stock is reserved, the invoice is issued (<strong>Invoice PDF</strong> downloads it) and the order gets a secure <strong>live tracking link</strong>. Send it once by WhatsApp, email or QR code.</p>
+<div class="shots"><figure><img src="img/12-order.jpg" alt=""></figure></div>
+<div class="shots two"><figure><img src="img/13-qr.jpg" alt=""><figcaption>QR code for packing slips</figcaption></figure><figure><img src="img/invoice-pdf-1.jpg" alt=""><figcaption>The invoice PDF</figcaption></figure></div>
+</section>
+
+<section class="step" id="s8"><h2><span class="n">8</span>Updating the customer as you go</h2>
+<p>Every production and delivery status change, every payment and every update you post (with “Show on the customer’s live tracking link” ticked) appears on the same link automatically. The page checks for changes on its own and flashes a “Your order has been updated” message.</p>
+<div class="shots two"><figure class="phone"><img src="img/14-tracking-mobile.jpg" alt=""><figcaption>In production, advance paid</figcaption></figure><figure class="phone"><img src="img/15-tracking-updated.jpg" alt=""><figcaption>Seconds after posting an update</figcaption></figure></div>
+</section>
+
+<section class="step" id="s9"><h2><span class="n">9</span>Delivery, payment and profit</h2>
+<p>QC passed → Ready → Packed → Dispatched → Delivered. Dispatch deducts the stock. Once delivered and fully paid the order completes, the products go into the customer’s reorder library, and <strong>Finance → Profit</strong> shows revenue, cost and profit split by business type.</p>
+<div class="shots"><figure><img src="img/16-order-complete.jpg" alt=""></figure></div>
+<div class="shots two"><figure class="phone"><img src="img/17-tracking-delivered.jpg" alt=""><figcaption>Customer’s link: delivered &amp; paid</figcaption></figure><figure><img src="img/18-profit.jpg" alt=""><figcaption>Profit</figcaption></figure></div>
+<div class="shots"><figure><img src="img/19-dashboard.jpg" alt=""><figcaption>Dashboard after the first order</figcaption></figure></div>
+</section>
+
+<section class="step" id="s10"><h2><span class="n">10</span>Customer portal and quote request form</h2>
+<p>Enable the portal from a customer’s profile. They see orders with live status, quotes, invoice PDFs, payments, their product library and one-click reorders. <code>quote-request.html</code> is the public form for your website and Instagram bio — submissions become leads.</p>
+<div class="shots two"><figure class="phone"><img src="img/22-portal.jpg" alt=""><figcaption>Portal dashboard</figcaption></figure><figure class="phone"><img src="img/23-portal-reorder.jpg" alt=""><figcaption>Reorder</figcaption></figure><figure class="phone"><img src="img/24-request-form.jpg" alt=""><figcaption>Quote request form</figcaption></figure></div>
+</section>
+
+<section class="step" id="s11"><h2><span class="n">11</span>On mobile</h2>
+<div class="shots two"><figure class="phone"><img src="img/25-mobile-dashboard.jpg" alt=""></figure><figure class="phone"><img src="img/26-mobile-menu.jpg" alt=""></figure></div>
+<div class="shots"><figure><img src="img/20-guide.jpg" alt=""><figcaption>“How it works” inside the app</figcaption></figure></div>
+</section>
+
+<section class="step" id="s12"><h2><span class="n">12</span>Going live with Supabase</h2>
+<p>This demo ran in <strong>local mode</strong> (one browser). To use Seamline across computers and send links customers can open anywhere:</p>
+<ol>
+  <li>Create a project at supabase.com.</li>
+  <li>SQL editor → paste <code>supabase/schema.sql</code> → Run.</li>
+  <li>Project settings → API: copy the URL and the <em>anon public</em> key into <code>js/config.js</code>.</li>
+  <li>Host the folder on a public address (Netlify, Vercel, GitHub Pages…) and put that address in <code>PUBLIC_BASE_URL</code>.</li>
+  <li>Open it and create the admin account. Add your team under Settings → Users.</li>
+</ol>
+<div class="shots"><figure><img src="img/21-cloud-settings.jpg" alt=""></figure></div>
+<p class="tip">Full details are in <code>README.md</code>.</p>
+</section>
+</main>
+</body>
+</html>
